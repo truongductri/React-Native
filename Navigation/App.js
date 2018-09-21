@@ -1,133 +1,87 @@
-import React from 'react';
-import {Button, View, Image, Text, ImageBackground } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import React, { Component } from 'react';
+import { Text, StatusBar, TextInput, View, StyleSheet } from 'react-native';
 
-class LogoTitle extends React.Component{
+
+export default class App extends Component {
+  state = {
+    name: '',
+    email: '',
+  };
+  
   render() {
     return (
-      <View>
-      <Image
-        source={require('./img/shop.jpg')}
-        style={{ width: 25, height: 30, marginLeft:6, borderRadius:2}}
-      />
-      
-        <Text style={{color:'red', fontSize:11, marginLeft:8}}>E-95</Text>
-        
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <View style={styles.header}>
+          <Text style={styles.description}>
+            This demo shows how using available TextInput customizations can make
+            forms much easier to use. Try completing the form and notice that different
+            fields have specific optimizations and the return key changes from focusing
+            next input to submitting the form.
+          </Text>
+        </View>
+        <TextInput
+          style={styles.input}
+          value={this.state.name}
+          onChangeText={name => this.setState({name})}
+          ref={ref => {this._nameInput = ref}}
+          placeholder="full name"
+          autoFocus={true}
+          autoCapitalize="words"
+          autoCorrect={true}
+          keyboardType="default"
+          returnKeyType="next"
+          onSubmitEditing={this._next}
+          blurOnSubmit={false}
+        />
+        <TextInput
+          style={styles.input}
+          value={this.state.email}
+          onChangeText={email => this.setState({email})}
+          ref={ref => {this._emailInput = ref}}
+          placeholder="email@example.com"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="email-address"
+          returnKeyType="send"
+          onSubmitEditing={this._submit}
+          blurOnSubmit={true}
+        />
       </View>
-        
-      
     );
   }
-}
-
-class HomeScreen extends React.Component{
-  static navigationOptions = {
-    // headerTitle instead of title
-    headerTitle : <LogoTitle/>,
-    headerRight: (
-      <Button
-        onPress={() => alert('This is a login button!')}
-        title="Login"
-        color="red"
-      />
-    ),
-    
+  
+  _next = () => {
+    this._emailInput && this._emailInput.focus();
   };
-
-
-  render(){
-    return(
-      <ImageBackground source={require('./img/background.jpg')} style={{width:'100%', height:'100%'}}>
-        <View style={{flex:1, alignItems: 'center', justifyContent:'center'}}>
-        <Text>
-        Home Screen
-      </Text>
-      <Button title="Go to Details page"
-              onPress={() => 
-                this.props.navigation.navigate('Details',{
-                number: 90,
-                announce:"congragulation!! You have already to here."
-              })}
-              />
-      </View>
-      </ImageBackground>
-      
-    );
-  }
-}
-
-class DetailsScreen extends React.Component{
-  static navigationOptions = ({ navigation, navigationOptions }) => {
-    const { params } = navigation.state;
-
-    return {
-      title: params ? params.otherParam : 'A Nested Details Screen',
-      /* These values are used instead of the shared configuration! */
-      headerStyle: {
-        backgroundColor: 'black',
-      },
-      headerTintColor: navigationOptions.headerStyle.backgroundColor,
-    };
+  
+  _submit = () => {
+    alert(`Welcome, ${this.state.name}! Confirmation email has been sent to ${this.state.email}`);
   };
-    
-  render(){
-    //get parameter inside out HomeScreen 
-    const {navigation} = this.props;
-    const ItemNum = navigation.getParam('number','No-ID');
-    const announceStr = navigation.getParam('announce','some default value.');
-
-    return(
-      <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-        <Text>Details Screen</Text>
-        <Text>ItemId:{ItemNum}</Text>
-        <Text>OtherParam:{announceStr}</Text>
-        <Button title="Go to Detail.. Again!!"
-            onPress={() =>
-              this.props.navigation.push('Details',{
-                 number: Math.floor(Math.random() * 100),
-              })
-            }
-        />
-        <Button title="Go to Home" 
-            onPress={() => this.props.navigation.navigate('Home')}
-        />
-        <Button title="Go Back"
-            onPress={()=> this.props.navigation.goBack()}/>
-        <Button
-              title="Update the title"
-               onPress={() => this.props.navigation.setParams({otherParam: 'Updated!'})}
-  />
-      </View>
-    )
-  }
 }
 
-
-
-const RootStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-    Details: DetailsScreen, 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ecf0f1',
   },
-  {
-    initialRouteName: 'Home',
-    navigationOptions:{
-      headerStyle:{
-        backgroundColor: 'black',
-      },
-      headerTintColor:'grey',
-      headerTitleStyle:{
-        fontWeight:'bold',
-        backgroundColor:'blue',
-        borderRadius: 5,
-        padding: 5,
-      }
-    }
-  }
-);
-
-export default class App extends React.Component {
-  render() {
-    return <RootStack/>;
-  }
-}
+  header: {
+    paddingTop: 20 ,
+    padding: 20,
+    backgroundColor: '#336699',
+  },
+  description: {
+    fontSize: 14,
+    color: 'white',
+  },
+  input: {
+    margin: 20,
+    marginBottom: 0,
+    height: 34,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    fontSize: 12,
+  },
+});
