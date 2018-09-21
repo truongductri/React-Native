@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, View, Image, Text } from 'react-native';
+import {Button, View, Image, Text, ImageBackground } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 class LogoTitle extends React.Component{
@@ -37,7 +37,8 @@ class HomeScreen extends React.Component{
 
   render(){
     return(
-      <View style={{flex:1, alignItems: 'center', justifyContent:'center'}}>
+      <ImageBackground source={require('./img/background.jpg')} style={{width:'100%', height:'100%'}}>
+        <View style={{flex:1, alignItems: 'center', justifyContent:'center'}}>
         <Text>
         Home Screen
       </Text>
@@ -49,6 +50,8 @@ class HomeScreen extends React.Component{
               })}
               />
       </View>
+      </ImageBackground>
+      
     );
   }
 }
