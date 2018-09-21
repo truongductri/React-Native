@@ -21,27 +21,19 @@ class LogoTitle extends React.Component{
 }
 
 class HomeScreen extends React.Component{
-  static navigationOptions = ({navigation}) => {
-    const param =navigation.state.params || {} ;
-    return{
-       // headerTitle instead of title
-      headerTitle : <LogoTitle/>,
-      headerLeft: (
-       <Button 
-          onPress={()=>navigation.navigate('MyModal')}
-          title="info"
-          color="red" 
-        />
-      ),
-      headerRight: (
-        <Button
-          onPress={() => alert('This is a login button!')}
-          title="Login"
-          color="red"
-        />
-      ),
-    };
+  static navigationOptions = {
+    // headerTitle instead of title
+    headerTitle : <LogoTitle/>,
+    headerRight: (
+      <Button
+        onPress={() => alert('This is a login button!')}
+        title="Login"
+        color="red"
+      />
+    ),
+    
   };
+
 
   render(){
     return(
@@ -58,19 +50,6 @@ class HomeScreen extends React.Component{
               />
       </View>
     );
-  }
-}
-
-class ModelScreen extends React.Component{
-  render(){
-    return(
-      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text>This is popup for my modal</Text>
-        <Button onPress={() => this.props.navigation.goBack()}
-                 title="Dismiss"
-        />
-      </View>
-    )
   }
 }
 
@@ -120,43 +99,32 @@ class DetailsScreen extends React.Component{
   }
 }
 
-const BStack = createStackNavigator(
-    {
-      Home: HomeScreen,
-      Details: DetailsScreen, 
-    },  
-    {
-      initialRouteName: 'Home',
-      navigationOptions:{
-        headerStyle:{
-          backgroundColor: 'black',
-        },
-        headerTintColor:'grey',
-        headerTitleStyle:{
-          fontWeight:'bold',
-          backgroundColor:'blue',
-          borderRadius: 5,
-          padding: 5,
-        }
-      }
-    }
- 
-)
 
-const AStack = createStackNavigator(
+
+const RootStack = createStackNavigator(
   {
-    Main : BStack,
-    MyModal : ModelScreen
+    Home: HomeScreen,
+    Details: DetailsScreen, 
   },
   {
-    mode: 'mode', // default: 'card'
-    headerMode: 'none',
+    initialRouteName: 'Home',
+    navigationOptions:{
+      headerStyle:{
+        backgroundColor: 'black',
+      },
+      headerTintColor:'grey',
+      headerTitleStyle:{
+        fontWeight:'bold',
+        backgroundColor:'blue',
+        borderRadius: 5,
+        padding: 5,
+      }
+    }
   }
-  
 );
 
 export default class App extends React.Component {
   render() {
-    return <AStack />;
+    return <RootStack/>;
   }
 }
