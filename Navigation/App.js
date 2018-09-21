@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Text, StatusBar, TextInput, View, StyleSheet } from 'react-native';
+import { Text, Button, StatusBar, TextInput, KeyboardAvoidingView, View, StyleSheet } from 'react-native';
 
 
 export default class App extends Component {
   state = {
-    name: '',
     email: '',
   };
   
@@ -14,49 +13,38 @@ export default class App extends Component {
         <StatusBar barStyle="light-content" />
         <View style={styles.header}>
           <Text style={styles.description}>
-            This demo shows how using available TextInput customizations can make
-            forms much easier to use. Try completing the form and notice that different
-            fields have specific optimizations and the return key changes from focusing
-            next input to submitting the form.
+            This demo shows how to avoid covering important UI elements with the software keyboard.
+            Focus the email input below and notice that the Sign Up button and the text adjusted
+            positions to make sure they are not hidden under the keyboard.
           </Text>
         </View>
-        <TextInput
-          style={styles.input}
-          value={this.state.name}
-          onChangeText={name => this.setState({name})}
-          ref={ref => {this._nameInput = ref}}
-          placeholder="full name"
-          autoFocus={true}
-          autoCapitalize="words"
-          autoCorrect={true}
-          keyboardType="default"
-          returnKeyType="next"
-          onSubmitEditing={this._next}
-          blurOnSubmit={false}
-        />
-        <TextInput
-          style={styles.input}
-          value={this.state.email}
-          onChangeText={email => this.setState({email})}
-          ref={ref => {this._emailInput = ref}}
-          placeholder="email@example.com"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="email-address"
-          returnKeyType="send"
-          onSubmitEditing={this._submit}
-          blurOnSubmit={true}
-        />
+        <KeyboardAvoidingView behavior="padding" style={styles.form}>
+          <TextInput
+            style={styles.input}
+            value={this.state.email}
+            onChangeText={email => this.setState({email})}
+            ref={ref => {this._emailInput = ref}}
+            placeholder="email@example.com"
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+            returnKeyType="send"
+            onSubmitEditing={this._submit}
+            blurOnSubmit={true}
+          />
+          <View>
+            <Button title="Sign Up" onPress={this._submit} />
+            <Text style={styles.legal}>
+              Some important legal fine print here
+            </Text>
+          </View>
+        </KeyboardAvoidingView>
       </View>
     );
   }
   
-  _next = () => {
-    this._emailInput && this._emailInput.focus();
-  };
-  
   _submit = () => {
-    alert(`Welcome, ${this.state.name}! Confirmation email has been sent to ${this.state.email}`);
+    alert(`Confirmation email has been sent to ${this.state.email}`);
   };
 }
 
@@ -83,5 +71,15 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     fontSize: 12,
+  },
+  legal: {
+    margin: 10,
+    color: '#333',
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  form: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
 });
